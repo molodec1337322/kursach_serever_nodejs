@@ -24,7 +24,7 @@ module.exports.login = async function (req, res) {
             const token = "Bearer" + candidate.remember_token
             res.cookie('token', token, {httpOnly: true})
             res.status(200).json({
-                token: token,
+                message: token,
             })
         } else {
             res.status(404).json({
@@ -40,7 +40,7 @@ module.exports.login = async function (req, res) {
 
 /**
  * Регистрация пользователя в системе
- * @param {JSON} req  {"email": "почта_пользователя", "password": "пароль_пользователя", "role_id": роль пользователя}
+ * @param {JSON} req  {"email": "почта_пользователя", "password": "пароль_пользователя"}
  * @param {JSON} res  {"message": "Пользователь создан"} или {"message": "Ошибка"}
  */
 module.exports.register = async function (req, res) {
