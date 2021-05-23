@@ -21,7 +21,7 @@ module.exports.login = async function (req, res) {
     if (candidate) {
         const passsword = bcrypt.compareSync(req.body.password, candidate.password)
         if (passsword) {
-            const token = "Bearer" + candidate.remember_token
+            const token = "Bearer " + candidate.remember_token
             res.cookie('token', token, {httpOnly: true})
             res.status(200).json({
                 message: token,
@@ -40,7 +40,7 @@ module.exports.login = async function (req, res) {
 
 /**
  * Регистрация пользователя в системе
- * @param {JSON} req  {"email": "почта_пользователя", "password": "пароль_пользователя"}
+ * @param {JSON} req  {"email": "почта_пользователя", "password": "пароль_пользователя", "nickname": "никнейм_пользователя"}
  * @param {JSON} res  {"message": "Пользователь создан"} или {"message": "Ошибка"}
  */
 module.exports.register = async function (req, res) {
@@ -50,10 +50,20 @@ module.exports.register = async function (req, res) {
             email: req.body.email
         }
     })
+    
+    const nicknameCandidate = await User.findOne({
+        where: {
+            nickname: req.body.nickname
+        }
+    })
 
     if (candidate) {
         res.status(409).json({
-            message: "Пользователь с таким email уже существует"
+            message: "Пользователь с таким email или именем уже существует"
+        })
+    } else if(nicknameCandidate){
+        res.status(409).json({
+            message: "Пользователь с таким ником уже существует"
         })
     } else {
         const salt = bcrypt.genSaltSync(10)
@@ -61,8 +71,10 @@ module.exports.register = async function (req, res) {
             await User.create({
                 email: req.body.email,
                 password: bcrypt.hashSync(req.body.password, salt),
+                nickname: req.body.nickname,
                 remember_token: jwt.sign({
                     email: req.body.email,
+                    nickname: req.body.nickname
                 }, keys.jwt)
             })
 
