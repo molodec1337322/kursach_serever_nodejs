@@ -19,7 +19,7 @@ const User = db.define("user",  {
     },
     nickname:{
         type: Sequelize.STRING,
-        allowNull: false;
+        allowNull: false
     },
     remember_token:{
         type:Sequelize.STRING,
