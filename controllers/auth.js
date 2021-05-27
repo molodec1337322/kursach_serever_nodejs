@@ -10,8 +10,6 @@ const keys = require("../config/keys")
  * @param {JSON} res {"token": "Bearer здесь_токен_авторизированного_пользователя"} или {"message": "Email или пароль не верны"}
  */
 module.exports.login = async function (req, res) {
-    console.log("------------------------")
-    console.log(req)
     const candidate = await User.findOne({
         where: {
             email: req.body.email
