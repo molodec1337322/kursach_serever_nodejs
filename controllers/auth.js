@@ -59,7 +59,7 @@ module.exports.register = async function (req, res) {
 
     if (candidate) {
         res.status(409).json({
-            message: "Пользователь с таким email или именем уже существует"
+            message: "Пользователь с таким email уже существует"
         })
     } else if(nicknameCandidate){
         res.status(409).json({
