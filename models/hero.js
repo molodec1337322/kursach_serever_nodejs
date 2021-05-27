@@ -2,7 +2,7 @@ const Sequelize = require("sequelize")
 const db = require("../config/database")
 
 const Hero = db.define("hero", {
-	id_hero: type:{ 
+	id_hero: { 
 		type: Sequelize.INTEGER,
         primaryKey: true,
         allowNull: false,
