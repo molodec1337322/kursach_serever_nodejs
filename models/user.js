@@ -17,6 +17,10 @@ const User = db.define("user",  {
         type: Sequelize.STRING,
         allowNull: false
     },
+    nickname:{
+        type: Sequelize.STRING,
+        allowNull: false
+    },
     remember_token:{
         type:Sequelize.STRING,
         allownull: true
