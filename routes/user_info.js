@@ -4,4 +4,6 @@ const router = express.Router()
 
 router.get("/getHeroes", controller.getHeroes)
 
+router.post("/createHero", controller.creteNewHero)
+
 module.exports = router
