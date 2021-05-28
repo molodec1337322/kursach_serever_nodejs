@@ -5,7 +5,7 @@ const keys = require("../config/keys")
 
 /**
 
-@param {JSON} req {token: "fdsfsdf.fdgvfdsg.gfdsgv"}
+@param {JSON} req none
 @param {JSON} res 
 [
     {
@@ -18,8 +18,8 @@ const keys = require("../config/keys")
 
 */
 module.exports.getHeroes = async function(req, res){
-	//console.log(req.header.authorization)
-	const decode = jwt_decode(req.body.token.split(" ")[1])
+	//console.log(req.headers.authorization)
+	const decode = jwt_decode(req.headers.authorization.split(" ")[1])
 	const userEmail = decode.email
 
 	User.findOne({where: {email: userEmail}})
@@ -42,11 +42,11 @@ module.exports.getHeroes = async function(req, res){
 
 
 /**
-* @param {JSON} req {token: "fdsfsdf.fdgvfdsg.gfdsgv", hero_name: "name"}
+* @param {JSON} req {hero_name: "name"}
 * @param {JSON} res {message: "Created"}
  */
-module.exports.creteNewHero = async function(req, res){
-	const decode = jwt_decode(req.body.token.split(" ")[1])
+module.exports.createNewHero = async function(req, res){
+	const decode = jwt_decode(req.headers.authorization.split(" ")[1])
 	const userEmail = decode.email
 
 	User.findOne({where: {email: userEmail}})
@@ -69,4 +69,22 @@ module.exports.creteNewHero = async function(req, res){
 			console.log(err)
 			res.status(500).json({message: "Server error"})
 		})
+}
+
+/**
+ * 
+ * @param {JSON} req {}
+ * @param {JSON} res {}
+ */
+module.exports.getHeroSpell = async function(req, res){
+
+}
+
+/**
+ * 
+ * @param {JSON} req {}
+ * @param {JSON} res {}
+ */
+module.exports.saveHeroSpell = async function(req, res){
+
 }

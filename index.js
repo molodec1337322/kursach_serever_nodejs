@@ -1,8 +1,10 @@
 require('dotenv').config()
 const express = require("express")
 const bodyParser = require('body-parser')
+const passport = require("passport")
 const db = require("./config/database")
 const cors = require('cors')
+const cookieParser = require("cookie-parser");
 
 const app = express()
 
@@ -24,9 +26,14 @@ db.authenticate()
      .catch(err => console.log("db connection failed!"))
     
 
+app.use(passport.initialize())
+require("./middleware/passport")(passport)
+
+
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(cors());
+app.use (cookieParser ());
 
 app.use("/auth", authRouter)
 app.use("/userInfo", userInfoRouter)
