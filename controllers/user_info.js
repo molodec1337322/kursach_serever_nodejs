@@ -77,7 +77,17 @@ module.exports.createNewHero = async function(req, res){
  * @param {JSON} res {}
  */
 module.exports.getHeroSpell = async function(req, res){
+	const decode = jwt_decode(req.headers.authorization.split(" ")[1])
+	const userEmail = decode.email
 
+	User.findOne({where: {email: userEmail}})
+		.then(user => {
+			
+		})
+		.catch(err => {
+			console.log(err)
+			res.status(500).json({message: "Server error"})
+		})
 }
 
 /**
@@ -86,5 +96,15 @@ module.exports.getHeroSpell = async function(req, res){
  * @param {JSON} res {}
  */
 module.exports.saveHeroSpell = async function(req, res){
+	const decode = jwt_decode(req.headers.authorization.split(" ")[1])
+	const userEmail = decode.email
 
+	User.findOne({where: {email: userEmail}})
+		.then(user => {
+			
+		})
+		.catch(err => {
+			console.log(err)
+			res.status(500).json({message: "Server error"})
+		})
 }
