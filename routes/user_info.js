@@ -9,6 +9,8 @@ router.post("/createHero", passport.authenticate('jwt', {session:false}), contro
 
 router.get("/getHeroSpells", passport.authenticate('jwt', {session:false}), controller.getHeroSpells)
 
+router.get("/getOneHeroSpell", passport.authenticate('jwt', {session:false}), controller.getOneHeroSpell)
+
 router.post("/saveHeroSpell", passport.authenticate('jwt', {session:false}), controller.saveHeroSpell)
 
 router.post("/editHeroSpell", passport.authenticate('jwt', {session:false}), controller.editHeroSpell)

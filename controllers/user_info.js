@@ -76,9 +76,31 @@ module.exports.createNewHero = async function(req, res){
 /**
  * 
  * @param {JSON} req {"hero_id": 1236}
- * @param {JSON} res []
+ * @param {JSON} res 
+ * [
+    {
+        "id_spell": 2,
+        "mana_use": 12,
+        "damage": 54,
+        "rate_of_fire": 36,
+        "speed": 59,
+        "range": 78,
+        "element": "fire",
+        "spell_name": "fireball"
+    },
+    {
+        "id_spell": 3,
+        "mana_use": 12,
+        "damage": 54,
+        "rate_of_fire": 356,
+        "speed": 39,
+        "range": 78,
+        "element": "water",
+        "spell_name": "waterball"
+    }
+]
  */
-module.exports.getHeroSpells = async function(req, res){
+module.exports.getHeroSpells = function(req, res){
 	Hero_spell.findAll({where: {hero_id: req.body.hero_id}})
 		.then(heroes_spells => {
 			//console.log(heroes_spells)
@@ -103,15 +125,37 @@ module.exports.getHeroSpells = async function(req, res){
 		})
 }
 
+/***
+ * @param {JSON} req {"id_spell": 3}
+ * @param {JSON} res 
+ * {
+    "id_spell": 3,
+    "mana_use": 12,
+    "damage": 54,
+    "rate_of_fire": 36,
+    "speed": 59,
+    "range": 78,
+    "element": "fire",
+    "spell_name": "fireball"
+	}
+ */
+module.exports.getOneHeroSpell = function(req, res){
+	Spell.findOne({where: {id_spell: req.body.id_spell}})
+		.then(spell => {
+			res.status(200).json(spell)
+		})
+		.catch(err => {
+			console.log(err)
+			res.status(500).json({message: "Server error"})
+		})
+}
+
 /**
  * 
  * @param {JSON} req {"hero_id": 1236, "mana_use": 12, "damage": 54, "rate_of_fire": 36, "speed": 59, "range": 78, "element": "fire", "spell_name": "fireball"}
  * @param {JSON} res {}
  */
 module.exports.saveHeroSpell = async function(req, res){
-	const decode = jwt_decode(req.headers.authorization.split(" ")[1])
-	const userEmail = decode.email
-
 	Spell.create({
 		mana_use: req.body.mana_use,
 		damage: req.body.damage,
@@ -144,21 +188,26 @@ module.exports.saveHeroSpell = async function(req, res){
 
 /**
  * 
- * @param {JSON} req {"hero_spell_id": 2545}
+ * @param {JSON} req {"spell_id": 2545, "mana_use": 12, "damage": 54, "rate_of_fire": 36, "speed": 59, "range": 78, "element": "fire", "spell_name": "fireball"}
  * @param {JSON} res {}
  */
 module.exports.editHeroSpell = async function(req, res){
-	const decode = jwt_decode(req.headers.authorization.split(" ")[1])
-	const userEmail = decode.email
-
-	/*
-	User.findOne({where: {email: userEmail}})
-		.then(user => {
-			
+	Spell.update({
+		mana_use: req.body.mana_use,
+		damage: req.body.damage,
+		rate_of_fire: req.body.rate_of_fire,
+		speed: req.body.speed,
+		range: req.body.range,
+		element: req.body.element,
+		spell_name: req.body.spell_name
+	}, {where: {id_spell: req.body.spell_id}})
+		.then(spell => {
+			res.status(200).json({
+				message: "edited"
+			})
 		})
 		.catch(err => {
 			console.log(err)
 			res.status(500).json({message: "Server error"})
 		})
-	*/
 }
