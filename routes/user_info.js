@@ -7,10 +7,10 @@ router.get("/getHeroes", passport.authenticate('jwt', {session:false}), controll
 
 router.post("/createHero", passport.authenticate('jwt', {session:false}), controller.createNewHero)
 
-router.get("/getHeroSpells", passport.authenticate('jwt', {session:false}), controllers.getHeroSpells)
+router.get("/getHeroSpells", passport.authenticate('jwt', {session:false}), controller.getHeroSpells)
 
-router.post("/saveHeroSpell", passport.authenticate('jwt', {session:false}), controllers.saveHeroSpell)
+router.post("/saveHeroSpell", passport.authenticate('jwt', {session:false}), controller.saveHeroSpell)
 
-router.post("/editHeroSpell", passport.authenticate('jwt', {session:false}), controllers.editHeroSpell)
+router.post("/editHeroSpell", passport.authenticate('jwt', {session:false}), controller.editHeroSpell)
 
 module.exports = router

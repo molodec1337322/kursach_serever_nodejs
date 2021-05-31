@@ -13,7 +13,7 @@ const Spell = db.define("spell", {
 		type: Sequelize.FLOAT,
     	allowNull: false
 	},
-	damage_use: {
+	damage: {
 		type: Sequelize.FLOAT,
     	allowNull: false
 	},
