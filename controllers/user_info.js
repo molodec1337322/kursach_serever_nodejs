@@ -2,6 +2,8 @@ const {User} = require("../models/user")
 const {Hero} = require("../models/hero")
 const {Spell} = require("../models/spell")
 const {Hero_spell} = require("../models/hero_spell")
+const {Item} = require("../models/item")
+const {Item_user} = require("../models/item_user")
 const jwt_decode = require("jwt-decode")
 const keys = require("../config/keys")
 
@@ -155,7 +157,7 @@ module.exports.getOneHeroSpell = function(req, res){
  * @param {JSON} req {"hero_id": 1236, "mana_use": 12, "damage": 54, "rate_of_fire": 36, "speed": 59, "range": 78, "element": "fire", "spell_name": "fireball"}
  * @param {JSON} res {}
  */
-module.exports.saveHeroSpell = async function(req, res){
+module.exports.saveHeroSpell = function(req, res){
 	Spell.create({
 		mana_use: req.body.mana_use,
 		damage: req.body.damage,
@@ -191,7 +193,7 @@ module.exports.saveHeroSpell = async function(req, res){
  * @param {JSON} req {"spell_id": 2545, "mana_use": 12, "damage": 54, "rate_of_fire": 36, "speed": 59, "range": 78, "element": "fire", "spell_name": "fireball"}
  * @param {JSON} res {}
  */
-module.exports.editHeroSpell = async function(req, res){
+module.exports.editHeroSpell = function(req, res){
 	Spell.update({
 		mana_use: req.body.mana_use,
 		damage: req.body.damage,
@@ -210,4 +212,119 @@ module.exports.editHeroSpell = async function(req, res){
 			console.log(err)
 			res.status(500).json({message: "Server error"})
 		})
+}
+
+/**
+ * 
+ * @param {JSON} req {"spell_id": 2545}
+ * @param {JSON} res 
+ */
+module.exports.deleteHeroSpell = function(req, res){
+	Hero_spell.destroy({where: {spell_id: spell.id_spell}})
+	.then(result => {
+		res.status(200).json({message: "spell deleted"})
+	})
+	.catch(err => {
+		console.log(err)
+		res.status(500).json({message: "Server error"})
+	})
+}
+
+/**
+ * 
+ * @param {JSON} req 
+ * @param {JSON} res 
+ */
+module.exports.getItemsAccount = function(req, res){
+	const decode = jwt_decode(req.headers.authorization.split(" ")[1])
+	const userEmail = decode.email
+
+	User.findOne({where: {email: userEmail}})
+		.then(user => {
+			Item_user.findAll({where: {user_id: user.id_user}})
+				.then(items_user => {
+					let final_response = []
+					for(let i = 0; i < items_user.length; i++){
+						Item.findOne({where: {id_item: items_user[i].item_id}})
+							.then(item => {
+								final_response.push(item)
+								if(final_response.length == items_user.length){
+									res.status(200).json(final_response)
+								}
+							})
+							.catch(err => {
+								console.log(err)
+								res.status(500).json({message: "Server error"})
+							})
+					}
+				})
+				.catch(err => {
+					console.log(err)
+					res.status(500).json({message: "Server error"})
+				})
+		})
+		.catch(err => {
+			console.log(err)
+			res.status(500).json({message: "Server error"})
+		})
+}
+
+/**
+ * 
+ * @param {JSON} req 
+ * @param {JSON} res 
+ */
+module.exports.getOneItemAccount = function(req, res){
+
+}
+
+/**
+ * 
+ * @param {JSON} req {"item_name": "Poison", "cost": 264}
+ * @param {JSON} res 
+ */
+module.exports.saveItemAccount = function(req, res){
+	const decode = jwt_decode(req.headers.authorization.split(" ")[1])
+	const userEmail = decode.email
+
+	User.findOne({where: {email: userEmail}})
+		.then(userRes => {
+			let user = userRes
+			Item.create({
+				name: req.body.item_name,
+				cost: req.body.cost
+			})
+			.then(item => {
+				Item_user.create({
+					user_id: user.id_user,
+					item_id: item.id_item
+				})
+				.then(result => {
+					res.status(200).json({
+						message: "item saved"
+					})
+				})
+				.catch(err => {
+					console.log(err)
+					res.status(500).json({message: "Server error"})
+				})
+			})
+			.catch(err => {
+				console.log(err)
+				res.status(500).json({message: "Server error"})
+			})
+		})
+		.catch(err => {
+			console.log(err)
+			res.status(500).json({message: "Server error"})
+		})
+}
+
+/**
+ * 
+ * @param {JSON} req 
+ * @param {JSON} res 
+ */
+module.exports.deleteItemAccount = function(req, res){
+
 }

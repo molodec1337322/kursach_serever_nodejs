@@ -15,4 +15,12 @@ router.post("/saveHeroSpell", passport.authenticate('jwt', {session:false}), con
 
 router.post("/editHeroSpell", passport.authenticate('jwt', {session:false}), controller.editHeroSpell)
 
+router.post("/deleteHeroSpell", passport.authenticate('jwt', {session:false}), controller.deleteHeroSpell)
+
+router.post("/editHeroSpell", passport.authenticate('jwt', {session:false}), controller.editHeroSpell)
+
+router.get("/getItemsAccount", passport.authenticate('jwt', {session:false}), controller.getItemsAccount)
+
+router.post("/saveItemAccount", passport.authenticate('jwt', {session:false}), controller.saveItemAccount)
+
 module.exports = router
