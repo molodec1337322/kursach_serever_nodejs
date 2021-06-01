@@ -234,6 +234,14 @@ module.exports.deleteHeroSpell = function(req, res){
  * 
  * @param {JSON} req 
  * @param {JSON} res 
+ * [
+    {
+        "id_item": 1,
+        "name": "Poison",
+        "cost": 264
+    }
+   ]
+ * 
  */
 module.exports.getItemsAccount = function(req, res){
 	const decode = jwt_decode(req.headers.authorization.split(" ")[1])
@@ -282,6 +290,9 @@ module.exports.getOneItemAccount = function(req, res){
  * 
  * @param {JSON} req {"item_name": "Poison", "cost": 264}
  * @param {JSON} res 
+ * {
+    "message": "item saved"
+   }
  */
 module.exports.saveItemAccount = function(req, res){
 	const decode = jwt_decode(req.headers.authorization.split(" ")[1])
