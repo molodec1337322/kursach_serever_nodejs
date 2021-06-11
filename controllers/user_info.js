@@ -58,7 +58,7 @@ module.exports.createNewHero = async function(req, res){
 			Hero.create({
 				user_id: user.id_user,
 				name: req.body.hero_name,
-				skill_points: 0
+				skill_points: 20
 			})
 			.then(hero => {
 				res.status(200).json({message: "Created"})
@@ -87,6 +87,7 @@ module.exports.createNewHero = async function(req, res){
         "rate_of_fire": 36,
         "speed": 59,
         "range": 78,
+		"skill_points_used": 20,
         "element": "fire",
         "spell_name": "fireball"
     },
@@ -97,6 +98,7 @@ module.exports.createNewHero = async function(req, res){
         "rate_of_fire": 356,
         "speed": 39,
         "range": 78,
+		"skill_points_used": 20,
         "element": "water",
         "spell_name": "waterball"
     }
@@ -137,6 +139,7 @@ module.exports.getHeroSpells = function(req, res){
     "rate_of_fire": 36,
     "speed": 59,
     "range": 78,
+	"skill_points_used": 20
     "element": "fire",
     "spell_name": "fireball"
 	}
@@ -154,7 +157,7 @@ module.exports.getOneHeroSpell = function(req, res){
 
 /**
  * 
- * @param {JSON} req {"hero_id": 1236, "mana_use": 12, "damage": 54, "rate_of_fire": 36, "speed": 59, "range": 78, "element": "fire", "spell_name": "fireball"}
+ * @param {JSON} req {"hero_id": 1236, "mana_use": 12, "damage": 54, "rate_of_fire": 36, "speed": 59, "range": 78, "skill_points_used": 20, "element": "fire", "spell_name": "fireball"}
  * @param {JSON} res {}
  */
 module.exports.saveHeroSpell = function(req, res){
@@ -164,6 +167,7 @@ module.exports.saveHeroSpell = function(req, res){
 		rate_of_fire: req.body.rate_of_fire,
 		speed: req.body.speed,
 		range: req.body.range,
+		skill_points_used: req.body.skill_points_used,
 		element: req.body.element,
 		spell_name: req.body.spell_name
 	})
@@ -190,7 +194,7 @@ module.exports.saveHeroSpell = function(req, res){
 
 /**
  * 
- * @param {JSON} req {"spell_id": 2545, "mana_use": 12, "damage": 54, "rate_of_fire": 36, "speed": 59, "range": 78, "element": "fire", "spell_name": "fireball"}
+ * @param {JSON} req {"spell_id": 2545, "mana_use": 12, "damage": 54, "rate_of_fire": 36, "speed": 59, "range": 78, "skill_points_used": 20, "element": "fire", "spell_name": "fireball"}
  * @param {JSON} res {}
  */
 module.exports.editHeroSpell = function(req, res){

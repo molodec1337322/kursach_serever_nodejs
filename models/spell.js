@@ -29,6 +29,10 @@ const Spell = db.define("spell", {
 		type: Sequelize.FLOAT,
     	allowNull: false
 	},
+	skill_points_used:{
+		type: Sequelize.INTEGER,
+    	allowNull: false
+	},
 	element: {
 		type: Sequelize.STRING,
 		allowNull: false
