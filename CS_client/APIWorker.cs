@@ -180,5 +180,48 @@ public class APIWorker
             return "Unknown error";
         }
     }
+
+    public static async Task<string> SaveHeroSpellAsync(string heroId, int manaUse, int damage, int rateOfFire, int speed, int range, int usedSkillPoints)
+    {
+        try
+        {
+            string answer = string.Empty;
+            WebRequest request = WebRequest.Create("http://localhost:5617/userInfo/saveHeroSpell");
+
+            request.ContentType = "application/json";
+            request.Method = "POST";
+
+            request.Headers.Add("Authorization", TokenHolder.UserToken);
+
+            using (StreamWriter streamWriter = new StreamWriter(request.GetRequestStream()))
+            {
+                string json = "{\"hero_id\":" + heroId + ", \"mana_use\":" + manaUse + ", \"damage\":" + damage + ", \"rate_of_fire\":" + rateOfFire + ", \"speed\":" + speed + ", \"range\":" + range + ", \"skill_points_used\":" + usedSkillPoints + ", \"element\": \"fire\"" + ", \"spell_name\": \"fireball\"" + "}";
+                streamWriter.Write(json);
+            }
+
+            WebResponse response = await request.GetResponseAsync();
+
+            using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+            {
+                answer = await reader.ReadToEndAsync();
+            }
+
+            response.Close();
+
+            return answer;
+        }
+        catch (WebException ex)
+        {
+            if (ex.Status == WebExceptionStatus.ProtocolError)
+            {
+                HttpWebResponse httpResponse = (HttpWebResponse)ex.Response;
+                if ((int)httpResponse.StatusCode == 500)
+                {
+                    return "Server error";
+                }
+            }
+            return "Unknown error";
+        }
+    }
 }
 
