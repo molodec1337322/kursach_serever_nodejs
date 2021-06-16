@@ -77,6 +77,38 @@ module.exports.createNewHero = async function(req, res){
 
 /**
  * 
+ * @param {*} req {id_hero}
+ * @param {*} res 
+ */
+module.exports.deleteHero = async function(req, res){
+	const decode = jwt_decode(req.headers.authorization.split(" ")[1])
+	const userEmail = decode.email
+
+	User.destroy({where: {email: userEmail}})
+		.then(user => {
+			Hero.create({
+				user_id: user.id_user,
+				name: req.body.hero_name,
+				skill_points: 20
+			})
+			.then(hero => {
+				res.status(200).json({message: "Created"})
+			})
+			.catch(err => {
+				console.log(err)
+				res.status(500).json({message: "Server error"})
+			})
+			
+		})
+		.catch(err => {
+			console.log(err)
+			res.status(500).json({message: "Server error"})
+		})
+}
+
+
+/**
+ * 
  * @param {JSON} req {"hero_id": 1236}
  * @param {JSON} res 
  * [
@@ -224,9 +256,17 @@ module.exports.editHeroSpell = function(req, res){
  * @param {JSON} res 
  */
 module.exports.deleteHeroSpell = function(req, res){
-	Hero_spell.destroy({where: {spell_id: spell.id_spell}})
+	Hero_spell.destroy({where: {spell_id: req.body.spell_id}})
 	.then(result => {
-		res.status(200).json({message: "spell deleted"})
+		Spell.destroy({where: {id_spell: req.body.spell_id}})
+		.then(result => {
+			res.status(200).json({message: "spell deleted"})
+		})
+		.catch(err => {
+			console.log(err)
+			res.status(500).json({message: "Server error"})
+		})
+		//res.status(200).json({message: "spell deleted"})
 	})
 	.catch(err => {
 		console.log(err)
