@@ -77,28 +77,13 @@ module.exports.createNewHero = async function(req, res){
 
 /**
  * 
- * @param {*} req {id_hero}
+ * @param {*} req {"id_hero": 2}
  * @param {*} res 
  */
 module.exports.deleteHero = async function(req, res){
-	const decode = jwt_decode(req.headers.authorization.split(" ")[1])
-	const userEmail = decode.email
-
-	User.destroy({where: {email: userEmail}})
-		.then(user => {
-			Hero.create({
-				user_id: user.id_user,
-				name: req.body.hero_name,
-				skill_points: 20
-			})
-			.then(hero => {
-				res.status(200).json({message: "Created"})
-			})
-			.catch(err => {
-				console.log(err)
-				res.status(500).json({message: "Server error"})
-			})
-			
+	Hero.desstroy({where: {hero_id: req.body.spell_id}})
+		.then(result => {
+			res.status(200).json({message: "hero deleted"})
 		})
 		.catch(err => {
 			console.log(err)
