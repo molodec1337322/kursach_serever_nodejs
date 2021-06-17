@@ -28,7 +28,7 @@ module.exports.getHeroes = async function(req, res){
 
 	User.findOne({where: {email: userEmail}})
 		.then(user => {
-			Hero.findAll()
+			Hero.findAll({where: {user_id: user.id_user}})
 			.then(heroes => {
 				res.status(200).json(heroes)
 			})
@@ -75,13 +75,14 @@ module.exports.createNewHero = async function(req, res){
 		})
 }
 
+
 /**
  * 
  * @param {*} req {"id_hero": 2}
  * @param {*} res 
  */
 module.exports.deleteHero = async function(req, res){
-	Hero.desstroy({where: {hero_id: req.body.spell_id}})
+	Hero.destroy({where: {id_hero: req.body.id_hero}})
 		.then(result => {
 			res.status(200).json({message: "hero deleted"})
 		})

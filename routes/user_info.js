@@ -7,6 +7,8 @@ router.get("/getHeroes", passport.authenticate('jwt', {session:false}), controll
 
 router.post("/createHero", passport.authenticate('jwt', {session:false}), controller.createNewHero)
 
+router.post("/deleteHero", passport.authenticate('jwt', {session:false}), controller.deleteHero)
+
 router.post("/getHeroSpells", passport.authenticate('jwt', {session:false}), controller.getHeroSpells)
 
 router.get("/getOneHeroSpell", passport.authenticate('jwt', {session:false}), controller.getOneHeroSpell)
