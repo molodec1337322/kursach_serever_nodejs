@@ -82,9 +82,55 @@ module.exports.createNewHero = async function(req, res){
  * @param {*} res 
  */
 module.exports.deleteHero = async function(req, res){
-	Hero.destroy({where: {id_hero: req.body.id_hero}})
-		.then(result => {
-			res.status(200).json({message: "hero deleted"})
+	Hero.findOne({where: {id_hero: req.body.id_hero}})
+		.then(hero => {
+			Hero_spell.findAll({where: {hero_id: hero.id_hero}})
+			.then(spells => {
+
+				if(spells.length == 0){
+					Hero.destroy({where: {id_hero: req.body.id_hero}})
+						.then(result => {
+							res.status(200).json("hero deleted")
+						})
+						.catch(err => {
+							console.log(err)
+							res.status(500).json({message: "Server error"})
+						})
+				}
+
+				let count = 0
+				for(i = 0; i < spells.length; i++){
+					Spell.destroy({where: {id_spell: spells[i].spell_id}})
+					.then(result => {
+						count++
+						if(spells.length == count){
+							Hero_spell.destroy({where: {hero_id: req.body.id_hero}})
+							.then(result => {
+								Hero.destroy({where: {id_hero: req.body.id_hero}})
+								.then(result => {
+									res.status(200).json("hero deleted")
+								})
+								.catch(err => {
+									console.log(err)
+									res.status(500).json({message: "Server error"})
+								})
+							})
+							.catch(err => {
+								console.log(err)
+								res.status(500).json({message: "Server error"})
+							})
+						}
+					})
+					.catch(err => {
+						console.log(err)
+						res.status(500).json({message: "Server error"})
+					})
+				}
+			})
+			.catch(err => {
+				console.log(err)
+				res.status(500).json({message: "Server error"})
+			})
 		})
 		.catch(err => {
 			console.log(err)
