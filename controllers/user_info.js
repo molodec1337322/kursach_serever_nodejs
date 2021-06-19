@@ -171,8 +171,12 @@ module.exports.deleteHero = async function(req, res){
 module.exports.getHeroSpells = function(req, res){
 	Hero_spell.findAll({where: {hero_id: req.body.hero_id}})
 		.then(heroes_spells => {
-			//console.log(heroes_spells)
+			
 			let final_response = []
+			if(heroes_spells.length == 0){
+				res.status(200).json(final_response)
+			}
+
 			for(let i = 0; i < heroes_spells.length; i++){
 				Spell.findOne({where: {id_spell: heroes_spells[i].spell_id}})
 					.then(spell => {
